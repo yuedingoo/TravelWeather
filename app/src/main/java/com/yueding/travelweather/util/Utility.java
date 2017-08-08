@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.yueding.travelweather.db.City;
 import com.yueding.travelweather.db.District;
 import com.yueding.travelweather.db.Province;
+import com.yueding.travelweather.gson.Images;
 import com.yueding.travelweather.gson.Weather;
 
 import org.json.JSONArray;
@@ -85,6 +86,18 @@ public class Utility {
             JSONArray jsonArray = jsonObject.getJSONArray("HeWeather5");
             String weatherContent = jsonArray.getJSONObject(0).toString();
             return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static Images handleImagesResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("images");
+            String imagesContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(imagesContent, Images.class);
         } catch (JSONException e) {
             e.printStackTrace();
         }
