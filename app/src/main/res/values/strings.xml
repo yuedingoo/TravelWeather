@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">TravelWeather</string>
+    <string name="deg">°</string>
+    <string name="forecast">预报</string>
+    <string name="to">~</string>
+    <string name="kong_qi_shi_du">空气湿度</string>
+    <string name="ti_gan_wen_du">体感温度</string>
+    <string name="kong_qi_zhi_liang">空气质量</string>
+    <string name="pm2_5">PM2.5</string>
+    <string name="zi_wai_xian">紫外线</string>
+    <string name="ya_qiang">气体压强</string>
+    <string name="suggestion">生活建议</string>
+    <string name="percent">%</string>
+    <string name="pm10">PM10</string>
 </resources>
