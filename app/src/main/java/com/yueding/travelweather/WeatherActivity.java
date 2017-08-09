@@ -1,5 +1,6 @@
 package com.yueding.travelweather;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
@@ -23,10 +24,14 @@ import com.bumptech.glide.Glide;
 import com.yueding.travelweather.gson.Forecast;
 import com.yueding.travelweather.gson.Images;
 import com.yueding.travelweather.gson.Weather;
+import com.yueding.travelweather.service.AutoUpdateService;
 import com.yueding.travelweather.util.HttpUtil;
 import com.yueding.travelweather.util.Utility;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -90,12 +95,23 @@ public class WeatherActivity extends AppCompatActivity {
             }
         });
 
+        Date currDate = new Date(System.currentTimeMillis());
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        String dateStr = dateFormat.format(currDate);
+//        Toast.makeText(WeatherActivity.this, dateStr, Toast.LENGTH_SHORT).show();
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = preferences.getString("weather", null);
         if (weatherString != null) {
             Weather weather = Utility.handleWeatherResponse(weatherString);
             mWeatherId = weather.basic.weatherId;
-            showWeatherInfo(weather);
+            String updateDate = weather.basic.update.updateTime.split(" ")[0];
+            /**判断更新日期，如果更新日期不是当天，则立即更新，否则直接显示*/
+            if (!dateStr.equals(updateDate)) {
+                requestWeather(mWeatherId);
+            } else {
+                showWeatherInfo(weather);
+            }
         } else {
             mWeatherId = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE);
@@ -236,6 +252,10 @@ public class WeatherActivity extends AppCompatActivity {
         uvText.setText(uv);
 
         weatherLayout.setVisibility(View.VISIBLE);
+
+        /**启动自动更新服务*/
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
 
     }
 
