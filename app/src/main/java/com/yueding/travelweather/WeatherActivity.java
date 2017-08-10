@@ -231,10 +231,17 @@ public class WeatherActivity extends AppCompatActivity {
         shiDuValue.setText(shidu);
         String feel = weather.now.feeltemp + "°C";
         feelTempValue.setText(feel);
-        String aqi = weather.aqi.city.qlty + " " + weather.aqi.city.aqi;
-        airQltValue.setText(aqi);
-        pm25Value.setText(weather.aqi.city.pm25);
-        pm10Value.setText(weather.aqi.city.pm10);
+        /**有些城市不能获取AQI信息（香港 澳门 等），会导致程序崩溃 */
+        if (weather.aqi != null) {
+            String aqi = weather.aqi.city.qlty + " " + weather.aqi.city.aqi;
+            airQltValue.setText(aqi);
+            pm25Value.setText(weather.aqi.city.pm25);
+            pm10Value.setText(weather.aqi.city.pm10);
+        } else {
+            airQltValue.setText("无");
+            pm10Value.setText("无");
+            pm25Value.setText("无");
+        }
 
         String comfort = "舒适度：" + weather.suggestion.comfort.info;
         String carWash = "洗车指数：" + weather.suggestion.carWash.info;
