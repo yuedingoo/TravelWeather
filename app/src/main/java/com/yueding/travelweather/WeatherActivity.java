@@ -68,6 +68,9 @@ public class WeatherActivity extends AppCompatActivity {
     private TextView travelText;
     private TextView uvText;
 
+    public boolean isLocation;
+    public String location;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +105,12 @@ public class WeatherActivity extends AppCompatActivity {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String weatherString = preferences.getString("weather", null);
-        if (weatherString != null) {
+
+        isLocation = getIntent().getBooleanExtra("isLocate", false);
+        if (isLocation) {
+            location = getIntent().getStringExtra("weather_id");
+        }
+        if ((weatherString != null) && !isLocation) {
             Weather weather = Utility.handleWeatherResponse(weatherString);
             mWeatherId = weather.basic.weatherId;
             String updateDate = weather.basic.update.updateTime.split(" ")[0];

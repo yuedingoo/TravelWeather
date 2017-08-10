@@ -2,7 +2,9 @@ package com.yueding.travelweather;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,7 +13,10 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,6 +51,9 @@ public class ChooseAreaFragment extends Fragment {
     private ProgressDialog progressDialog;
     private TextView titleText;
     private Button backButton;
+    private LinearLayout locLayout;
+    private TextView locText;
+    private String location;
 
     private ListView listView;
     private ArrayAdapter<String> adapter;
@@ -70,6 +78,8 @@ public class ChooseAreaFragment extends Fragment {
         View view = inflater.inflate(R.layout.choose_area, container, false);
         titleText = (TextView) view.findViewById(R.id.title_text);
         backButton = (Button) view.findViewById(R.id.back_button);
+        locLayout = (LinearLayout) view.findViewById(R.id.locLayout);
+        locText = (TextView) view.findViewById(R.id.loc_text);
         listView = (ListView) view.findViewById(R.id.list_view);
         adapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1, datalist);
         listView.setAdapter(adapter);
@@ -79,8 +89,29 @@ public class ChooseAreaFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
         queryProvinces();
+
+        locLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), LocActivity.class);
+                startActivity(intent);
+                getActivity().finish();
+            }
+        });
+
+        if (getActivity() instanceof WeatherActivity) {
+            WeatherActivity activity = (WeatherActivity) getActivity();
+            if (activity.isLocation) {
+                location = activity.location;
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        locText.setText(location);
+                    }
+                });
+            }
+        }
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
