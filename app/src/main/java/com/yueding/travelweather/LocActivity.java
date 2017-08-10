@@ -2,15 +2,12 @@ package com.yueding.travelweather;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baidu.location.BDLocation;
@@ -98,6 +95,23 @@ public class LocActivity extends AppCompatActivity {
             intent.putExtra("isLocate", true);
             startActivity(intent);
             finish();
+
+            /**定位失败*/
+            /*if (bdLocation.getLocType() == BDLocation.TypeServerError) {
+
+                服务端网络定位失败，可以反馈IMEI号和大体定位时间到loc-bugs@baidu.com，会有人追查原因
+
+            } else if (bdLocation.getLocType() == BDLocation.TypeNetWorkException) {
+
+                网络不同导致定位失败，请检查网络是否通畅
+
+            } else if (bdLocation.getLocType() == BDLocation.TypeCriteriaException) {
+
+                无法获取有效定位依据导致定位失败，一般是由于手机的原因，
+                处于飞行模式下一般会造成这种结果，可以试着重启手机
+
+            }*/
+
         }
 
         @Override
